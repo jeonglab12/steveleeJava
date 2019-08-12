@@ -1,6 +1,5 @@
 package K_basic;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class Ehardt31 {
@@ -19,12 +18,13 @@ public class Ehardt31 {
 			output: 남은시간 : hh:mm:ss
 		*/
 		// 문제를 풀기위해서 아래 2개의 클래스를 활용해보세요.
-		//Date dt = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+
+		// 현재시간
 		Calendar currentTime = Calendar.getInstance();
 
 		// 퇴근시간
 		Calendar endTime = Calendar.getInstance();
+		
 		endTime.set(Calendar.HOUR_OF_DAY, 18);
 		endTime.set(Calendar.MINUTE, 30);
 		endTime.set(Calendar.SECOND, 00);
