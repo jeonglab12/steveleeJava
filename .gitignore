@@ -13,6 +13,7 @@ local.properties
 .project
 Servers/
 target
+*.txt
 
 # External tool builders
 .externalToolBuilders/
