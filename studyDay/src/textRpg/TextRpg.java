@@ -2,8 +2,8 @@ package textRpg;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -13,124 +13,133 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 public class TextRpg {
-
+	
+	private static Hero hero;
+	private static Monster monster;
+	
 	public static void main(String[] args) {
 		
+		// game
+		Game game = new Game(42, 17);
+		
+		// Charactor
+//		Hero hero = new Hero("●", "용사", 100, 21, 16, 10, 3);
+//		Monster monster = new Monster("★", "몬스터", 100, 21, 1, 0, 0);
+		
+		// Frame
 		JFrame jf = new JFrame();
 		jf.setTitle("swing test");
 		jf.setSize(500, 600);
 		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+		// Pane
 		JPanel jp = new JPanel();
-		jp.setSize(480, 580);
-		jp.setLocation(10, 10);
-		
+		jp.setBounds(10, 10, 480, 580);
 		jp.setLayout(null);
 		
-		JTextField jt = new JTextField();
-		jt.setSize(240, 30);
-		jt.setLocation(20, 510);
-		
-		JTextArea ja = new JTextArea();
-		ja.setBackground(null);
-		ja.setSize(440, 300);
-		ja.setLocation(20, 30);
-		ja.setBorder(new TitledBorder("MAP"));
-		
-		JTextArea ja2 = new JTextArea();
-		ja2.setSize(250, 100);
-		ja2.setLocation(20, 340);
+		// Input field
+		JTextField event = new JTextField();
+		event.setBounds(20, 510, 440, 30);
 
-		// Button 2
-		JButton jb1 = new JButton("MAP");
-		jb1.setSize(100, 50);
-		jb1.setLocation(20, 450);
+		// Stage
+		JTextArea stage = new JTextArea();
+		stage.setBackground(null);
+		stage.setBounds(20, 20, 440, 300);
+		stage.setBorder(new TitledBorder("MAP"));
 		
-		jb1.addActionListener(new ActionListener() {
+		// Display
+		JTextArea display = new JTextArea();
+		display.setBounds(20, 330, 440, 110);
 
+		// Start
+		JButton startButton = new JButton("START");
+		startButton.setBounds(20, 450, 440, 50);
+		
+		startButton.addActionListener(new ActionListener() {
+			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("MAP CLICKED");
 				
-				for (int y = 0; y < 17; y++) {
-					for (int x = 0; x < 20; x++) {
-						ja.append("☆");
-					}
-					ja.append("\n");
+				hero = new Hero("●", "용사", 100, 21, 16, 10, 3);
+				monster = new Monster("★", "몬스터", 100, 21, 1, 0, 0);
+				
+				game.updateMap(stage, hero, monster);
+				
+				event.requestFocus();
+			}
+		
+		});
+		
+		
+		event.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				
+				display.setText("");
+				
+				if(monster.getHp() == 0) {
+					display.setText("몬스터가 죽었습니다. 다시 시작하시려면 START 버튼을 눌러주세요.");
+					return;
 				}
-			}
-		
-		});
-		
-		
-		// Button 2
-		JButton jb2 = new JButton("save2");
-		jb2.setSize(100, 50);
-		jb2.setLocation(130, 450);
-		
-		jb2.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("save2 clicked");
-			}
-		
-		});
-		
-		
-		// append panel
-		jp.add(jb1);
-		jp.add(jb2);
-		jp.add(jt);
-		jp.add(ja);
-		jp.add(ja2);
-		
-		// append frame
-		jf.addWindowListener(new WindowListener() {
-			
-			@Override
-			public void windowOpened(WindowEvent e) {
-				// TODO Auto-generated method stub
-				jt.requestFocus();
-			}
-			
-			@Override
-			public void windowIconified(WindowEvent e) {
-				// TODO Auto-generated method stub
 				
-			}
-			
-			@Override
-			public void windowDeiconified(WindowEvent e) {
-				// TODO Auto-generated method stub
+				monster.move();
 				
-			}
-			
-			@Override
-			public void windowDeactivated(WindowEvent e) {
-				// TODO Auto-generated method stub
+				switch (e.getKeyCode()) {
+				case 37: // 왼쪽
+					hero.setX(hero.getX() - 1);
+					break;
+				case 38: // 위
+					hero.setY(hero.getY() - 1);
+					break;
+				case 39: // 오른쪽
+					hero.setX(hero.getX() + 1);
+					break;
+				case 40: // 아래
+					hero.setY(hero.getY() + 1);
+					break;
+				case 65: // 공격
+					
+					boolean attack = hero.attack(monster); 
+					
+					if (attack) {
+						display.append("공격에 성공하였습니다." + "\n");
+						display.append(monster.getName() + "의 남은 체력은 " + monster.getHp() + "입니다.");
+					} else {
+						display.setText("거리거 너무 멀거나, 몬스터가 피했습니다.");
+					}
+					
+					break;
+				default:
+					display.setText("잘못된 키를 눌렀습니다." + "\n");
+					break;
+				}
 				
-			}
-			
-			@Override
-			public void windowClosing(WindowEvent e) {
-				// TODO Auto-generated method stub
+				game.updateMap(stage, hero, monster);
 				
-			}
-			
-			@Override
-			public void windowClosed(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowActivated(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
+				event.setText("");
 			}
 		});
 		
+		// add panel
+		jp.add(startButton);
+		jp.add(event);
+		jp.add(stage);
+		jp.add(display);
+		
+		// set frame
 		jf.setContentPane(jp);
 		jf.setVisible(true);
 	}
