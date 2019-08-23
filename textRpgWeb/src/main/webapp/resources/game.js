@@ -9,7 +9,7 @@ function keyEvent(e) {
 	
 	var xhr = new XMLHttpRequest();
 	
-	if (e.keyCode == 40 || e.keyCode == 38 || e.keyCode == 37 || e.keyCode == 39) {
+	if (e.keyCode == 40 || e.keyCode == 38 || e.keyCode == 37 || e.keyCode == 39 || e.keyCode == 65) {
 		
 		var data = {
 			keyCode : e.keyCode
@@ -27,7 +27,9 @@ function keyEvent(e) {
 				
 				var data = JSON.parse(this.responseText);
 				
-				$map.innerHTML = data.map;
+				console.log(data);
+				
+				$map.innerHTML = data.game.map;
 			}
 		}
 		

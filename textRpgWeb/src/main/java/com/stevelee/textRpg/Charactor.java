@@ -2,6 +2,7 @@ package com.stevelee.textRpg;
 
 public class Charactor {
 
+	private String	uuid;
 	private String 	avatar;
 	private String 	name;
 	private int 	hp;
@@ -10,7 +11,10 @@ public class Charactor {
 	private int 	power;
 	private int 	weapon; // 사거리
 
-	public Charactor(String avatar, String name, int hp, int x, int y, int power, int weapon) {
+	
+	public Charactor(String uuid, String avatar, String name, int hp, int x, int y, int power, int weapon) {
+		super();
+		this.uuid = uuid;
 		this.avatar = avatar;
 		this.name = name;
 		this.hp = hp;

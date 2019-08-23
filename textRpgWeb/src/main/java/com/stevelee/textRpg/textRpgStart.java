@@ -2,7 +2,9 @@ package com.stevelee.textRpg;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
@@ -13,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 /**
  * Servlet implementation class textRpgStart
@@ -22,8 +25,9 @@ public class textRpgStart extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	Game game = new Game(40, 30);
-	Hero hero = new Hero("●", "용사", 100, 21, 16, 10, 3);
-	Monster monster = new Monster("★", "몬스터", 100, 21, 1, 0, 0);
+	
+	Hero hero = new Hero(UUID.randomUUID().toString(), "●", "용사", 100, 21, 16, 10, 3);
+	Monster monster = new Monster(UUID.randomUUID().toString(), "★", "몬스터", 100, 21, 1, 0, 0);
 	
     /**
      * @see HttpServlet#HttpServlet()
@@ -54,9 +58,7 @@ public class textRpgStart extends HttpServlet {
 
 		response.getWriter().println("<body>");
 
-		response.getWriter().println("<div id='map'>");
-		response.getWriter().println(map);
-		response.getWriter().println("</div>");
+		response.getWriter().println("<div id='map'>" + map + "</div>");
 		
 		response.getWriter().println("<div id='display'>@display</div>");
 		
@@ -71,6 +73,8 @@ public class textRpgStart extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		HashMap<String, Object> data = new HashMap<String, Object>();
+		HashMap<String, Object> stage = new HashMap<String, Object>();
+		ArrayList<Charactor> charactor = new ArrayList<Charactor>();
 		String map = "";
 		
 		Gson gson = new GsonBuilder().disableHtmlEscaping().create();
@@ -93,15 +97,23 @@ public class textRpgStart extends HttpServlet {
 		case 40: // 아래
 			hero.setY(hero.getY() + 1);
 			break;
+		case 65: // 공격
+			boolean attack = hero.attack(monster); 
+			break;
 		default:
 			System.out.println("error");
 			break;
 		}
-		
 
 		map = game.updateMap(hero, monster);
 		
-		data.put("map", map);
+		charactor.add(hero);
+		charactor.add(monster);
+		
+		stage.put("map", map);
+		
+		data.put("game", stage);
+		data.put("charactors", charactor);
 		
 		
 		// 응답
@@ -113,7 +125,5 @@ public class textRpgStart extends HttpServlet {
 		out.print(gson.toJson(data));
 		out.flush();
 	    out.close();  
-		
 	}
-
 }
