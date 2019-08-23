@@ -21,15 +21,18 @@ function keyEvent(e) {
 		//응답 처리
 		xhr.onreadystatechange = function() {
 			
+			var data = null;
 			var $map = document.querySelector("#map");
+			
+			console.log("========== XHR STATUS : " + this.status + " ==========");
 			
 			if (this.readyState == 4 && this.status == 200) {
 				
-				var data = JSON.parse(this.responseText);
-				
-				console.log(data);
+				data = JSON.parse(this.responseText);
 				
 				$map.innerHTML = data.game.map;
+				
+				updateDisplay(data.message);
 			}
 		}
 		
@@ -41,4 +44,36 @@ function keyEvent(e) {
 	
 }
 
+/**
+ * 상태창에 메세지 표시하기
+ * @param message
+ * @returns
+ */
+function updateDisplay(message) {
+	
+	var $display = document.querySelector("#display");
+	var messageId = generateUUID();
+	
+	var messageTag = document.createElement('p');
+	
+	messageTag.id = 'm' + messageId;
+	messageTag.textContent = messageTag.id + ": " + message;
+	
+	$display.appendChild(messageTag);
+	
+	setTimeout(function(){
+		messageTag.remove();
+	}, 3000)
+}
+
+/**
+ * 유니크ID 생성하기
+ * @returns
+ */
+function generateUUID() {
+	function s4() {
+		return ((1 + Math.random()) * 0x10000 | 0).toString(16).substring(1);
+	}
+	return s4() + s4();
+}
 

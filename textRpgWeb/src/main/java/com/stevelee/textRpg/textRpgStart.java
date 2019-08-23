@@ -60,7 +60,7 @@ public class textRpgStart extends HttpServlet {
 
 		response.getWriter().println("<div id='map'>" + map + "</div>");
 		
-		response.getWriter().println("<div id='display'>@display</div>");
+		response.getWriter().println("<div id='display'></div>");
 		
 		response.getWriter().println("</body>");
 		response.getWriter().println("</html>");
@@ -75,44 +75,67 @@ public class textRpgStart extends HttpServlet {
 		HashMap<String, Object> data = new HashMap<String, Object>();
 		HashMap<String, Object> stage = new HashMap<String, Object>();
 		ArrayList<Charactor> charactor = new ArrayList<Charactor>();
+		boolean isAttack = false;
+		String message = "";
 		String map = "";
 		
 		Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+		
 		
 		// 요청
 		String params = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
 		JsonObject keyData = gson.fromJson(params, JsonObject.class);
 		
+		
 		// 키보드 이벤트 처리
 		switch (keyData.get("keyCode").getAsInt()) {
 		case 37: // 왼쪽
 			hero.setX(hero.getX() - 1);
+			message = hero.getName() + "가 이동했습니다.";
 			break;
 		case 38: // 위
 			hero.setY(hero.getY() - 1);
+			message = hero.getName() + "가 이동했습니다.";
 			break;
 		case 39: // 오른쪽
 			hero.setX(hero.getX() + 1);
+			message = hero.getName() + "가 이동했습니다.";
 			break;
 		case 40: // 아래
 			hero.setY(hero.getY() + 1);
+			message = hero.getName() + "가 이동했습니다.";
 			break;
 		case 65: // 공격
-			boolean attack = hero.attack(monster); 
+			isAttack = hero.attack(monster); 
+			
+			if (isAttack) {
+				message = hero.getName() + "님이 " + monster.getName() + "을 공격했습니다.";
+			}
+			
 			break;
 		default:
 			System.out.println("error");
 			break;
 		}
 
+		
+		// game
 		map = game.updateMap(hero, monster);
-		
-		charactor.add(hero);
-		charactor.add(monster);
-		
 		stage.put("map", map);
 		
 		data.put("game", stage);
+
+		
+		// status
+		
+		
+		data.put("message", message);
+		
+		
+		// charactors
+		charactor.add(hero);
+		charactor.add(monster);
+		
 		data.put("charactors", charactor);
 		
 		
