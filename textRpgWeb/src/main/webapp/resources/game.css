@@ -1,3 +1,34 @@
 @charset "UTF-8";
 
-#map {margin-bottom: 20px}
+html {font-size:14px; line-height:1.5; }
+body {color:#444;}
+* { font-family: "Montserrat", "Nanum Square", Helvetica, sans-serif; box-sizing: border-box; outline: none;}
+
+html,
+body {padding:0; margin:0;}
+h1,h2,h3,h4,h5,h6 {font-weight:normal;margin:0;}
+ul, ol {list-style:none;margin:0;padding:0;}
+fieldset {margin:0;padding:0;border:none;}
+textarea {resize:none;}
+button {cursor:pointer;padding:0;border:none;}
+a {text-decoration:none;color:#000000;}
+p {margin:0;}
+strong {font-weight:bold;}
+em {font-style:normal;}
+table {width:100%;border-collapse:collapse;border-spacing:0;}
+th {font-weight:bold;padding:0;}
+td {padding:0;}
+input {padding:0; margin:0 ;background:none; box-sizing:border-box;}
+dl, dt, dd {margin:0; padding:0;}
+figure {margin:0;}
+img {vertical-align:top;}
+hr {display:none;}
+i {font-style: normal}
+
+
+#title {margin-top: 20px; text-align: center; font-size: 30px; font-style: italic;}
+#map {margin: 20px auto 0; font-size: 0;}
+#display {overflow-y:auto; height: 100px; margin: 0 auto; padding: 10px; color: #ffffff; background: #333333;}
+
+.tile {display: inline-block; vertical-align: top; width: 20px; height: 20px; background-color: #eeeeee;}
+.charactor {display: inline-block; vertical-align: top; width: 20px; height: 20px; text-align: center; line-height: 20px; font-size: 14px; background-color: #eeeeee;}

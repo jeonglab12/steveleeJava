@@ -24,10 +24,10 @@ public class textRpgStart extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
 	
-	Game game = new Game(40, 30);
+	Game game = new Game(30, 30);
 	
-	Hero hero = new Hero(UUID.randomUUID().toString(), "●", "용사", 100, 21, 16, 10, 3);
-	Monster monster = new Monster(UUID.randomUUID().toString(), "★", "몬스터", 100, 21, 1, 0, 0);
+	Hero hero = new Hero(UUID.randomUUID().toString(), "●", "용사", 100, 19, 16, 10, 3);
+	Monster monster = new Monster(UUID.randomUUID().toString(), "★", "몬스터", 100, 15, 2, 0, 0);
 	
     /**
      * @see HttpServlet#HttpServlet()
@@ -42,8 +42,8 @@ public class textRpgStart extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		
 		String map = game.updateMap(hero, monster);
+		String mapStyle = "style=\"width:" + game.getWidth() * 20 +"px; height:" + game.getHeight() * 20 + "px\"";
 		
 		response.setContentType("text/html; charset=UTF-8");
 		
@@ -52,15 +52,19 @@ public class textRpgStart extends HttpServlet {
 
 		response.getWriter().println("<head>");
 		response.getWriter().println("<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js\"></script>");
-		response.getWriter().println("<script src='/resources/game.js'></script>");
-		response.getWriter().println("<link rel='stylesheet' href='/resources/game.css' />");
+		response.getWriter().println("<link rel=\"stylesheet\" href=\"/resources/game.css\" />");
+		response.getWriter().println("<title>TEXTRPGWEB v0.1</title>");
 		response.getWriter().println("</head>");
 
 		response.getWriter().println("<body>");
 
-		response.getWriter().println("<div id='map'>" + map + "</div>");
+		response.getWriter().println("<h1 id=\"title\">TEX TRPG WEB</h1>");
 		
-		response.getWriter().println("<div id='display'></div>");
+		response.getWriter().println("<div id=\"map\" " + mapStyle + ">" + map + "</div>");
+		
+		response.getWriter().println("<div id=\"display\"></div>");
+		
+		response.getWriter().println("<script src=\"/resources/game.js\"></script>");
 		
 		response.getWriter().println("</body>");
 		response.getWriter().println("</html>");
@@ -91,19 +95,19 @@ public class textRpgStart extends HttpServlet {
 		switch (keyData.get("keyCode").getAsInt()) {
 		case 37: // 왼쪽
 			hero.setX(hero.getX() - 1);
-			message = hero.getName() + "가 이동했습니다.";
+			message = hero.getName() + "가 [" + hero.getX() + "," + hero.getY() + "]로 이동했습니다.";
 			break;
 		case 38: // 위
 			hero.setY(hero.getY() - 1);
-			message = hero.getName() + "가 이동했습니다.";
+			message = hero.getName() + "가 [" + hero.getX() + "," + hero.getY() + "]로 이동했습니다.";
 			break;
 		case 39: // 오른쪽
 			hero.setX(hero.getX() + 1);
-			message = hero.getName() + "가 이동했습니다.";
+			message = hero.getName() + "가 [" + hero.getX() + "," + hero.getY() + "]로 이동했습니다.";
 			break;
 		case 40: // 아래
 			hero.setY(hero.getY() + 1);
-			message = hero.getName() + "가 이동했습니다.";
+			message = hero.getName() + "가 [" + hero.getX() + "," + hero.getY() + "]로 이동했습니다.";
 			break;
 		case 65: // 공격
 			isAttack = hero.attack(monster); 

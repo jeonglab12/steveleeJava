@@ -1,5 +1,17 @@
-// bind keydown
-document.addEventListener("keydown", keyEvent);
+
+var $display = document.querySelector("#display");
+var $map = document.querySelector("#map");
+	
+
+window.onload = function () {
+	
+	$display.style.width = $map.style.width;
+	
+	// bind keydown
+	document.addEventListener("keydown", keyEvent);
+	
+}
+
 
 /**
  * 이벤트 처리
@@ -63,7 +75,7 @@ function updateDisplay(message) {
 	
 	setTimeout(function(){
 		messageTag.remove();
-	}, 3000)
+	}, 1000)
 }
 
 /**
